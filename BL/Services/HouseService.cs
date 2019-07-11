@@ -29,6 +29,14 @@ namespace BL.Services
             _dbContext.SaveChanges();
             return true;
         }
+        public bool EditHouse(EditHouseDTO house)
+        {
+            House h = _dbContext.Houses.Find(house.Id);
+            h.Address = house.Address;
+            h.MCName = house.MCName;
+            h.Rooms = house.Rooms;
+            return true;
+        }
 
         public ReturnHouseDTO GetHouse(GetHouseInfoDTO h)
         {
@@ -61,11 +69,13 @@ namespace BL.Services
             return true;
         }
 
-        //public async Task<IEnumerable<ReturnHouseDTO>> GetHouses()
+        //public ReturnHouseDTO GetHouseConsumptionMax()
         //{
-        //    IEnumerable<House> houses = await _dbContext.Houses.ToListAsync();
+        //    _dbContext.Find<House>()
+        //}
+        //public ReturnHouseDTO GetHouseConsumptionMin()
+        //{
 
-        //    return houses.Select(house => house.MapToReturnModel);
         //}
     }
 
@@ -94,6 +104,14 @@ namespace BL.Services
     public class GetHouseInfoDTO
     {
         public int Id { get; set; }
+    }
+    public class EditHouseDTO
+    {
+        public int Id { get; set; }
+        public string Address { get; set; }
+
+        public string MCName { get; set; }
+        public IEnumerable<Room> Rooms { get; set; }
     }
 
 }

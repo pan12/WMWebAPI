@@ -8,8 +8,11 @@ namespace BL.Services.Interfaces
     public interface IHouseService
     {
         bool CreateHouse(CreateHouseDTO house);
-        bool RemoveHouse(RemoveHouseDTO id);
-        ReturnHouseDTO GetHouse(GetHouseInfoDTO id);
+        bool EditHouse(EditHouseDTO house);
+        bool RemoveHouse(RemoveHouseDTO house);
+        ReturnHouseDTO GetHouse(GetHouseInfoDTO house);
+        //ReturnHouseDTO GetHouseConsumptionMax();
+        //ReturnHouseDTO GetHouseConsumptionMin();
     }
 
 }
