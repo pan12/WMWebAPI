@@ -20,6 +20,6 @@ namespace BL.Models
 
 
         public ReturnHouseDTO Map()
-            => new ReturnHouseDTO { Address = this.Address, MCName = this.MCName };
+            => new ReturnHouseDTO { Id = this.Id, Address = this.Address, MCName = this.MCName, Rooms = this.Rooms };        
     }
 }

@@ -16,7 +16,7 @@ namespace BL.Services
         {
             _dbContext = dbContext;
         }
-        public void CreateHouse(CreateHouseDTO house)
+        public bool CreateHouse(CreateHouseDTO house)
         {
 
             var h = new House
@@ -27,18 +27,43 @@ namespace BL.Services
 
             _dbContext.Houses.Add(h);
             _dbContext.SaveChanges();
+            return true;
         }
 
-        public ReturnHouseDTO GetHouseInfo(int id)
+        public ReturnHouseDTO GetHouse(GetHouseInfoDTO h)
         {
-            House house = _dbContext.Houses.Find(id);
+            House house = _dbContext.Houses.Find(h.Id);
 
             return house.Map();
         }
 
+        public IEnumerable<ReturnHouseDTO> GetHouses()
+        {
+            var houses = _dbContext.Houses;
+            List<ReturnHouseDTO> returnHouses = new List<ReturnHouseDTO>();
+
+            foreach (var b in houses)
+            {
+                returnHouses.Add(b.Map());
+            }
+
+            return returnHouses;
+        }
+
+        public async Task<IEnumerable<ReturnHouseDTO>> GetHousesAsync()
+            => await _dbContext.Houses.Select(house => house.Map()).ToListAsync();
+
+        public bool RemoveHouse (RemoveHouseDTO h)
+        {            
+            House house = _dbContext.Houses.Find(h.Id);
+            _dbContext.Remove(house);
+            _dbContext.SaveChanges();
+            return true;
+        }
+
         //public async Task<IEnumerable<ReturnHouseDTO>> GetHouses()
         //{
-        //    IEnumerable<House>  houses = await _dbContext.Houses.ToListAsync();
+        //    IEnumerable<House> houses = await _dbContext.Houses.ToListAsync();
 
         //    return houses.Select(house => house.MapToReturnModel);
         //}
@@ -53,7 +78,22 @@ namespace BL.Services
 
     public class ReturnHouseDTO
     {
+
+        public int Id { get; set; }
         public string Address { get; set; }
-        
+
+        public string MCName { get; set; }
+        public IEnumerable<Room> Rooms { get; set; }
+
     }
+
+    public class RemoveHouseDTO
+    {
+        public int Id { get; set; }
+    }
+    public class GetHouseInfoDTO
+    {
+        public int Id { get; set; }
+    }
+
 }

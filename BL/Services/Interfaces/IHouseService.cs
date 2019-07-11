@@ -7,7 +7,9 @@ namespace BL.Services.Interfaces
 {
     public interface IHouseService
     {
-        void CreateHouse(CreateHouseDTO house);
+        bool CreateHouse(CreateHouseDTO house);
+        bool RemoveHouse(RemoveHouseDTO id);
+        ReturnHouseDTO GetHouse(GetHouseInfoDTO id);
     }
 
 }
