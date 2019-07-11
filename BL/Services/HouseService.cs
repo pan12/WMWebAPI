@@ -45,20 +45,20 @@ namespace BL.Services
             return house.Map();
         }
 
-        public IEnumerable<ReturnHouseDTO> GetHouses()
-        {
-            var houses = _dbContext.Houses;
-            List<ReturnHouseDTO> returnHouses = new List<ReturnHouseDTO>();
+        //public IEnumerable<ReturnHouseDTO> GetHouses()
+        //{
+        //    var houses = _dbContext.Houses;
+        //    List<ReturnHouseDTO> returnHouses = new List<ReturnHouseDTO>();
 
-            foreach (var b in houses)
-            {
-                returnHouses.Add(b.Map());
-            }
+        //    foreach (var b in houses)
+        //    {
+        //        returnHouses.Add(b.Map());
+        //    }
 
-            return returnHouses;
-        }
+        //    return returnHouses;
+        //}
 
-        public async Task<IEnumerable<ReturnHouseDTO>> GetHousesAsync()
+        public async Task<IEnumerable<ReturnHouseDTO>> GetHouses()
             => await _dbContext.Houses.Select(house => house.Map()).ToListAsync();
 
         public bool RemoveHouse (RemoveHouseDTO h)
