@@ -22,7 +22,6 @@ namespace WebAPI.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
         {
-            _houseService.CreateHosue();
             return new string[] { "value1", "value2", };
         }
 

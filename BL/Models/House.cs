@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BL.Services;
 
 namespace BL.Models
 {
@@ -16,5 +17,9 @@ namespace BL.Models
         {
             Rooms = new HashSet<Room>();
         }
+
+
+        public ReturnHouseDTO Map()
+            => new ReturnHouseDTO { Address = this.Address, MCName = this.MCName };
     }
 }
