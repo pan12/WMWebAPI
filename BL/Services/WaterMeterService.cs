@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using BL.Models;
 using BL.Services.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace BL.Services
 {
@@ -14,35 +15,40 @@ namespace BL.Services
         {
             _dbContext = dbContext;
         }
+
+
+        
         public bool CreateWaterMeter(CreateWaterMeterDBO waterMeter)
         {
-            var vM = new WaterMeter
+            var wM = new WaterMeter
             {
                 RoomId = waterMeter.RoomId,
                 SerialNumber = waterMeter.SerialNumber,
                 MeterData = waterMeter.MeterData
             };
-            _dbContext.WaterMeters.Add(vM);
+            _dbContext.WaterMeters.Add(wM);
             _dbContext.SaveChanges();
             return true;
         }
         public bool RegWaterMeter(RegWaterMeterDBO waterMeter)
         {
-            _dbContext.WaterMeters.Find(waterMeter.Id).RoomId = waterMeter.RoomId;
+            var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
+            wM.RoomId = waterMeter.RoomId;
             _dbContext.SaveChanges();
             return true;
         }
         public bool InputDataWaterMeterId(InputDataWaterMeterIdDBO waterMeter)
         {
-            _dbContext.WaterMeters.Find(waterMeter.Id).MeterData = waterMeter.MeterData;
+            var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
+            wM.MeterData = waterMeter.MeterData;
             _dbContext.SaveChanges();
             return true;
             
         }
         public bool InputDataWaterMeterSerialNum(InputDataWaterMeterSerialNumDBO waterMeter)
         {
-            _dbContext.WaterMeters.Single(WaterMeter => WaterMeter.SerialNumber == waterMeter.SerialNumber).MeterData
-                = waterMeter.MeterData;
+            var wM = _dbContext.WaterMeters.SingleOrDefault(wMDB => wMDB.SerialNumber == waterMeter.SerialNumber);
+            wM.MeterData = waterMeter.MeterData;
             _dbContext.SaveChanges();
             return true;
         }
