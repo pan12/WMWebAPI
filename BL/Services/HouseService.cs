@@ -46,18 +46,6 @@ namespace BL.Services
             return house.Map();
         }
 
-        //public IEnumerable<ReturnHouseDTO> GetHouses()
-        //{
-        //    var houses = _dbContext.Houses;
-        //    List<ReturnHouseDTO> returnHouses = new List<ReturnHouseDTO>();
-
-        //    foreach (var b in houses)
-        //    {
-        //        returnHouses.Add(b.Map());
-        //    }
-
-        //    return returnHouses;
-        //}
 
         public async Task<IEnumerable<ReturnHouseDTO>> GetHouses()
             => await _dbContext.Houses.Select(house => house.Map()).ToListAsync();
@@ -70,14 +58,20 @@ namespace BL.Services
             return true;
         }
 
-        //public ReturnHouseDTO GetHouseConsumptionMax()
-        //{
-        //    _dbContext.Find<House>()
-        //}
-        //public ReturnHouseDTO GetHouseConsumptionMin()
-        //{
-
-        //}
+        public ReturnHouseDTO GetHouseConsumptionMax()
+        {
+            var max = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData>h2.MeterData ? h1:h2 );
+            var room = _dbContext.Rooms.Find(max.RoomId);
+            var house = _dbContext.Houses.Find(room.HouseId);
+            return house.Map();
+        }
+        public ReturnHouseDTO GetHouseConsumptionMin()
+        {
+            var max = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData < h2.MeterData ? h1 : h2);
+            var room = _dbContext.Rooms.Find(max.RoomId);
+            var house = _dbContext.Houses.Find(room.HouseId);
+            return house.Map();
+        }
     }
 
 

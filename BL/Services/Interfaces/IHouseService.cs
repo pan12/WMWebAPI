@@ -10,8 +10,8 @@ namespace BL.Services.Interfaces
         bool EditHouse(EditHouseDTO house);
         bool RemoveHouse(RemoveHouseDTO house);
         ReturnHouseDTO GetHouse(GetHouseInfoDTO house);
-        //ReturnHouseDTO GetHouseConsumptionMax();
-        //ReturnHouseDTO GetHouseConsumptionMin();
+        ReturnHouseDTO GetHouseConsumptionMax();
+        ReturnHouseDTO GetHouseConsumptionMin();
     }
 
 }
