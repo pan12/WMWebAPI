@@ -35,6 +35,7 @@ namespace BL.Services
             h.Address = house.Address;
             h.MCName = house.MCName;
             h.Rooms = house.Rooms;
+            _dbContext.SaveChanges();
             return true;
         }
 

@@ -13,6 +13,6 @@ namespace BL.Models
         [ForeignKey("RoomId")]
         public Room Room { get; set; }        
         public string SerialNumber { get; set; }
-        public int MeterReading { get; set; }
+        public int MeterData { get; set; }
     }
 }
