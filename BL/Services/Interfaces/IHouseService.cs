@@ -12,6 +12,7 @@ namespace BL.Services.Interfaces
         ReturnHouseDTO GetHouse(GetHouseInfoDTO house);
         ReturnHouseDTO GetHouseConsumptionMax();
         ReturnHouseDTO GetHouseConsumptionMin();
+        IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house);
     }
 
 }

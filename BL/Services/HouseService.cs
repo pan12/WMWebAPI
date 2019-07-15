@@ -12,7 +12,7 @@ namespace BL.Services
     public class HouseService : IHouseService
     {
         Db _dbContext;
-        public HouseService (Db dbContext)
+        public HouseService(Db dbContext)
         {
             _dbContext = dbContext;
         }
@@ -50,8 +50,8 @@ namespace BL.Services
         public async Task<IEnumerable<ReturnHouseDTO>> GetHouses()
             => await _dbContext.Houses.Select(house => house.Map()).ToListAsync();
 
-        public bool RemoveHouse (RemoveHouseDTO h)
-        {            
+        public bool RemoveHouse(RemoveHouseDTO h)
+        {
             House house = _dbContext.Houses.Find(h.Id);
             _dbContext.Remove(house);
             _dbContext.SaveChanges();
@@ -60,18 +60,26 @@ namespace BL.Services
 
         public ReturnHouseDTO GetHouseConsumptionMax()
         {
-            var max = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData>h2.MeterData ? h1:h2 );
+            var max = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData > h2.MeterData ? h1 : h2);
             var room = _dbContext.Rooms.Find(max.RoomId);
             var house = _dbContext.Houses.Find(room.HouseId);
             return house.Map();
         }
         public ReturnHouseDTO GetHouseConsumptionMin()
         {
-            var max = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData < h2.MeterData ? h1 : h2);
-            var room = _dbContext.Rooms.Find(max.RoomId);
+            var min = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData < h2.MeterData ? h1 : h2);
+            var room = _dbContext.Rooms.Find(min.RoomId);
             var house = _dbContext.Houses.Find(room.HouseId);
             return house.Map();
         }
+        public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house)
+        {
+            var roomsInHouse = _dbContext.Rooms.Where(r => r.HouseId == house.Id);
+            var waterMeters = roomsInHouse.SelectMany(r => _dbContext.WaterMeters.Where(w => w.RoomId == r.Id));
+            return waterMeters.Select(w => w.Map());
+        }
+
+
     }
 
 
@@ -108,5 +116,9 @@ namespace BL.Services
         public string MCName { get; set; }
         public IEnumerable<Room> Rooms { get; set; }
     }
-
+    public class ReturnWaterMeterDTO
+    {
+        public int Id { get; set; }
+        public int WaterMeterData { get; set; }
+    }
 }
