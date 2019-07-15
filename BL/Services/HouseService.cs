@@ -58,18 +58,18 @@ namespace BL.Services
             return true;
         }
 
-        public ReturnHouseDTO GetHouseConsumptionMax()
+        public async Task<ReturnHouseDTO> GetHouseConsumptionMax()
         {
             var max = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData > h2.MeterData ? h1 : h2);
-            var room = _dbContext.Rooms.Find(max.RoomId);
-            var house = _dbContext.Houses.Find(room.HouseId);
+            var room = await _dbContext.Rooms.FindAsync(max.RoomId);
+            var house = await _dbContext.Houses.FindAsync(room.HouseId);
             return house.Map();
         }
-        public ReturnHouseDTO GetHouseConsumptionMin()
+        public async Task<ReturnHouseDTO> GetHouseConsumptionMin()
         {
             var min = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData < h2.MeterData ? h1 : h2);
-            var room = _dbContext.Rooms.Find(min.RoomId);
-            var house = _dbContext.Houses.Find(room.HouseId);
+            var room = await _dbContext.Rooms.FindAsync(min.RoomId);
+            var house = await _dbContext.Houses.FindAsync(room.HouseId);
             return house.Map();
         }
         public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house)
