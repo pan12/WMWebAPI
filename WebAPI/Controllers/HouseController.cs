@@ -6,6 +6,7 @@ using BL.Services;
 using BL.Services.Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace WebAPI.Controllers
 {
@@ -24,6 +25,8 @@ namespace WebAPI.Controllers
         {
             return _houseService.GetHouses();
         }
+
+        [Route("test")]
         public Task<ReturnHouseDTO> GetConsumptionMax()
         {
             return _houseService.GetHouseConsumptionMax();
@@ -41,18 +44,19 @@ namespace WebAPI.Controllers
             GetHouseInfoDTO infoDTO = new GetHouseInfoDTO { Id = id };
             return _houseService.GetHouse(infoDTO);
         }
-        IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(int id)
+
+        [HttpGet]
+        [Route("/meters/{id}")]
+        public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters([FromQuery] int id)
         {
             GetHouseInfoDTO infoDTO = new GetHouseInfoDTO { Id = id };
             return _houseService.GetAllWaterMeters(infoDTO);
         }
 
-
         // POST: api/House
         [HttpPost]
         public bool PostHouse ([FromBody] CreateHouseDTO houseDTO)
         {
-
             return _houseService.CreateHouse(houseDTO);
         }
 
@@ -60,7 +64,6 @@ namespace WebAPI.Controllers
         [HttpPut]
         public bool PutHouse([FromBody] EditHouseDTO houseDTO)
         {
-
             return _houseService.EditHouse(houseDTO);
         }
 
