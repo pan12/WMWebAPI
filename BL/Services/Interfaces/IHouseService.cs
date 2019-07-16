@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace BL.Services.Interfaces
 {
@@ -10,8 +11,9 @@ namespace BL.Services.Interfaces
         bool EditHouse(EditHouseDTO house);
         bool RemoveHouse(RemoveHouseDTO house);
         ReturnHouseDTO GetHouse(GetHouseInfoDTO house);
-        ReturnHouseDTO GetHouseConsumptionMax();
-        ReturnHouseDTO GetHouseConsumptionMin();
+        Task<IEnumerable<ReturnHouseDTO>> GetHouses();
+        Task<ReturnHouseDTO> GetHouseConsumptionMax();
+        Task<ReturnHouseDTO> GetHouseConsumptionMin();
         IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house);
     }
 

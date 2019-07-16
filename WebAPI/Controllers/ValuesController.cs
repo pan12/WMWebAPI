@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BL.Services.Interfaces;
-//using Bl;
 using Microsoft.AspNetCore.Mvc;
+using BL.Services;
 
 namespace WebAPI.Controllers
 {
@@ -12,12 +12,6 @@ namespace WebAPI.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        IHouseService _houseService;
-        public ValuesController(IHouseService houseService)
-        {
-            _houseService = houseService;
-        }
-
         // GET api/values
         [HttpGet]
         public ActionResult<IEnumerable<string>> Get()
