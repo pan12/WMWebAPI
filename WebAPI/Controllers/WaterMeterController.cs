@@ -34,15 +34,15 @@ namespace WebAPI.Controllers
         // PUT: api/WaterMeter/5
         [HttpPut]
 
-        bool PutDataWaterMeterId([FromBody] InputDataWaterMeterIdDBO waterMeter)
+        public bool PutDataWaterMeterId([FromBody] InputDataWaterMeterIdDBO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterId(waterMeter);
         }
-        bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDBO waterMeter)
+        public bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDBO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterSerialNum(waterMeter);
         }
-        bool PutRegWaterMeter(RegWaterMeterDBO waterMeter)
+        public bool PutRegWaterMeter(RegWaterMeterDBO waterMeter)
         {
             return _waterMeterService.RegWaterMeter(waterMeter);
         }
