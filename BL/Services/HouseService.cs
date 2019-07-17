@@ -58,57 +58,91 @@ namespace BL.Services
             return true;
         }
 
-        
         public async Task<ReturnHouseDTO> GetHouseConsumptionMax()
         {
-            int max = 0;
-            House houseMax = _dbContext.Houses.First();
-            foreach (var house in _dbContext.Houses)
-            {
-                var meterDataSum = await _dbContext.Houses
-                    .Select(h => h.Id)
-                    .Join(
-                        _dbContext.Rooms,
-                        h => h,
-                        r => r.HouseId,
-                        (h, r) => r
-                    ).Join(
-                        _dbContext.WaterMeters,
-                        r => r.Id,
-                        wm => wm.RoomId,
-                        (r, wm) => wm
-                    ).SumAsync(wm => wm.MeterData);
-                if (meterDataSum > max) { max = meterDataSum; houseMax = house; };
-            }
-            return houseMax.Map();
-                
+            var housesWithIndications = _dbContext.Houses
+                .Join(
+                    _dbContext.Rooms,
+                    h => h.Id,
+                    r => r.HouseId,
+                    (h, r) => new { house = h, room = r }
+                ).Join(
+                    _dbContext.WaterMeters,
+                    o => o.room.Id,
+                    wm => wm.RoomId,
+                    (o, wm) => new { o.house, o.room, meter = wm }
+                )
+                .GroupBy(g => new { g.house.Id, g.house.Address, g.room.ApartamentNumber, g.meter.SerialNumber, g.meter.MeterData })
+                .Select(s => new {
+                    s.Key.Id,
+                    s.Key.Address,
+                    Value = s.Max(v => v.meter.MeterData)
+                });
+
+            var housesWithValue = _dbContext.Houses
+                .Join(
+                housesWithIndications,
+                h => h.Id,
+                hWI => hWI.Id,
+                (h, hWI) => new { h.Id, hWI.Value })
+                .GroupBy(o => o)
+                .Select(h => new { h.Key.Id, Value = h.Sum(s => s.Value) });
+
+            var houseWithMaxValue = await _dbContext.Houses
+                .Join(
+                    housesWithValue,
+                    h => h.Id,
+                    hWV => hWV.Id,
+                    (h, hWV) => new { h.Id, hWV.Value })
+                .GroupBy(o => o)
+                .Select(h => new { h.Key.Id, Value = h.Max(m => m.Value) })
+                .ToListAsync();
+            var house = new GetHouseInfoDTO { Id = houseWithMaxValue.First().Id };
+            return GetHouse(house);
+             
         }
+
         public async Task<ReturnHouseDTO> GetHouseConsumptionMin()
         {
-            //var min = _dbContext.WaterMeters.Aggregate((h1, h2) => h1.MeterData < h2.MeterData ? h1 : h2);
-            //var room = await _dbContext.Rooms.FindAsync(min.RoomId);
-            //var house = await _dbContext.Houses.FindAsync(room.HouseId);
-            
-            House houseMin = _dbContext.Houses.First();
-            int min = 999999999;
-            foreach (var house in _dbContext.Houses)
-            {
-                var meterDataSum = await _dbContext.Houses
-                    .Select(h => h.Id)
-                    .Join(
-                        _dbContext.Rooms,
-                        h => h,
-                        r => r.HouseId,
-                        (h, r) => r
-                    ).Join(
-                        _dbContext.WaterMeters,
-                        r => r.Id,
-                        wm => wm.RoomId,
-                        (r, wm) => wm
-                    ).SumAsync(wm => wm.MeterData);
-                if (meterDataSum < min)  { min = meterDataSum; houseMin = house; };
-            }
-            return houseMin.Map();
+            var housesWithIndications = _dbContext.Houses
+                .Join(
+                    _dbContext.Rooms,
+                    h => h.Id,
+                    r => r.HouseId,
+                    (h, r) => new { house = h, room = r }
+                ).Join(
+                    _dbContext.WaterMeters,
+                    o => o.room.Id,
+                    wm => wm.RoomId,
+                    (o, wm) => new { o.house, o.room, meter = wm }
+                )
+                .GroupBy(g => new { g.house.Id, g.house.Address, g.room.ApartamentNumber, g.meter.SerialNumber, g.meter.MeterData })
+                .Select(s => new {
+                    s.Key.Id,
+                    s.Key.Address,
+                    Value = s.Max(v => v.meter.MeterData)
+                });
+
+            var housesWithValue = _dbContext.Houses
+                .Join(
+                housesWithIndications,
+                h => h.Id,
+                hWI => hWI.Id,
+                (h, hWI) => new { h.Id, hWI.Value })
+                .GroupBy(o => o)
+                .Select(h => new { h.Key.Id, Value = h.Sum(s => s.Value) });
+
+            var houseWithMinValue = await _dbContext.Houses
+                .Join(
+                    housesWithValue,
+                    h => h.Id,
+                    hWV => hWV.Id,
+                    (h, hWV) => new { h.Id, hWV.Value })
+                .GroupBy(o => o)
+                .Select(h => new { h.Key.Id, Value = h.Min(m => m.Value) })
+                .ToListAsync();
+            var house = new GetHouseInfoDTO { Id = houseWithMinValue.First().Id };
+            return GetHouse(house);
         }
         public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house)
         {
@@ -129,7 +163,7 @@ namespace BL.Services
         }
     }
 
-    
+
 
     public class CreateHouseDTO
     {
@@ -144,7 +178,6 @@ namespace BL.Services
         public string Address { get; set; }
 
         public string MCName { get; set; }
-        public IEnumerable<Room> Rooms { get; set; }
 
     }
 

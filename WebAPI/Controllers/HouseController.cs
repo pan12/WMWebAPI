@@ -10,6 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace WebAPI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class HouseController : ControllerBase

@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace BL.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -13,7 +13,7 @@ namespace BL.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
-                    Address = table.Column<string>(nullable: true),
+                    Address = table.Column<string>(nullable: false),
                     MCName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
@@ -49,7 +49,7 @@ namespace BL.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.SerialColumn),
                     RoomId = table.Column<int>(nullable: false),
                     SerialNumber = table.Column<string>(nullable: true),
-                    MeterReading = table.Column<int>(nullable: false)
+                    MeterData = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
