@@ -9,7 +9,7 @@ using BL.Services.Interfaces;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class WaterMeterController : ControllerBase
     {
@@ -18,37 +18,33 @@ namespace WebAPI.Controllers
         {
             _waterMeterService = waterMeterService;
         }
-        // GET: api/WaterMeter
-        //[HttpGet]
-        
-        
-        
 
-        // POST: api/WaterMeter
         [HttpPost]
+        [Route("wMeter")]
         public bool PostWaterMeter([FromBody] CreateWaterMeterDBO waterMeter)
         {
             return _waterMeterService.CreateWaterMeter(waterMeter);
         }
 
-        // PUT: api/WaterMeter/5
-        [HttpPut]
 
+        [HttpPut]
+        [Route("wMeter/inputDataID")]
         public bool PutDataWaterMeterId([FromBody] InputDataWaterMeterIdDBO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterId(waterMeter);
         }
+
+        [Route("wMeter/inputDataSerNum")]
         public bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDBO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterSerialNum(waterMeter);
         }
+
+        [Route("wMeter/reg")]
         public bool PutRegWaterMeter([FromBody]RegWaterMeterDBO waterMeter)
         {
             return _waterMeterService.RegWaterMeter(waterMeter);
         }
-
-        // DELETE: api/ApiWithActions/5
-        //[HttpDelete("{id}")]
         
     }
 }

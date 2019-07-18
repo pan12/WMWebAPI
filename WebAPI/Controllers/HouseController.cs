@@ -29,14 +29,14 @@ namespace WebAPI.Controllers
             return _houseService.GetHouses();
         }
 
-        [Route("consumptionMax")]
+        [Route("house/consumptionMax")]
         public Task<ReturnHouseDTO>
             GetConsumptionMax()
         {
             return _houseService.GetHouseConsumptionMax();
         }
 
-        [Route("consumptionMin")]
+        [Route("house/consumptionMin")]
         public Task<ReturnHouseDTO> GetConsumptionMin()
         {
             return _houseService.GetHouseConsumptionMin();
@@ -58,6 +58,7 @@ namespace WebAPI.Controllers
 
         // POST: api/House
         [HttpPost]
+        [Route("house")]
         public bool PostHouse ([FromBody] CreateHouseDTO houseDTO)
         {
             return _houseService.CreateHouse(houseDTO);
@@ -65,6 +66,7 @@ namespace WebAPI.Controllers
 
         // PUT: api/House/5
         [HttpPut]
+        [Route("house")]
         public bool PutHouse([FromBody] EditHouseDTO houseDTO)
         {
             return _houseService.EditHouse(houseDTO);
@@ -72,6 +74,7 @@ namespace WebAPI.Controllers
 
         // DELETE: api/ApiWithActions/5
         [HttpDelete("{id}")]
+        [Route("house")]
         public bool DeleteHouse (int id)
         {
             RemoveHouseDTO remove = new RemoveHouseDTO { Id = id };
