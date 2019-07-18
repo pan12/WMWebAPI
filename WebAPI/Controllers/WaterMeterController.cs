@@ -42,7 +42,7 @@ namespace WebAPI.Controllers
         {
             return _waterMeterService.InputDataWaterMeterSerialNum(waterMeter);
         }
-        public bool PutRegWaterMeter(RegWaterMeterDBO waterMeter)
+        public bool PutRegWaterMeter([FromBody]RegWaterMeterDBO waterMeter)
         {
             return _waterMeterService.RegWaterMeter(waterMeter);
         }

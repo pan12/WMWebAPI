@@ -41,9 +41,7 @@ namespace BL.Services
 
         public ReturnHouseDTO GetHouse(GetHouseInfoDTO h)
         {
-            House house = _dbContext.Houses.Find(h.Id);
-
-            return house.Map();
+            return _dbContext.Houses.Find(h.Id).Map();
         }
 
 
@@ -146,9 +144,6 @@ namespace BL.Services
         }
         public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house)
         {
-            //var roomsInHouse = _dbContext.Rooms.Where(r => r.HouseId == house.Id);
-            //var waterMeters = roomsInHouse.SelectMany(r => _dbContext.WaterMeters.Where(w => w.RoomId == r.Id));
-
             var waterMeters = _dbContext.Rooms
                 .Where(r => r.HouseId == house.Id)
                 .Join(
@@ -178,6 +173,7 @@ namespace BL.Services
         public string Address { get; set; }
 
         public string MCName { get; set; }
+        //public IEnumerable<Room> Rooms { get; set; }
 
     }
 

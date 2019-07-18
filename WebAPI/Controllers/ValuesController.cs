@@ -8,7 +8,7 @@ using BL.Services;
 
 namespace WebAPI.Controllers
 {
-    [Consumes("application/json")]
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class ValuesController : ControllerBase

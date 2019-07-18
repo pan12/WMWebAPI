@@ -9,6 +9,7 @@ using BL.Services.Interfaces;
 
 namespace WebAPI.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class RoomController : ControllerBase
@@ -17,19 +18,16 @@ namespace WebAPI.Controllers
         public RoomController (IRoomService roomService)
         {
             _roomService = roomService;
-        }
-        // GET: api/Room
-        [HttpGet]
-        
+        }        
         // POST: api/Room
         [HttpPost]
-        public bool PostRoom (CreateRoomDTO createRoom)
+        public bool PostRoom ([FromBody]CreateRoomDTO createRoom)
         {
             return _roomService.CreateRoom(createRoom);
         }
 
         // PUT: api/Room/5
-        public bool PutRegRoom(RegRoomDTO room)
+        public bool PutRegRoom([FromBody]RegRoomDTO room)
         {
             return _roomService.RegRoom(room);
         }

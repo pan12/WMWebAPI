@@ -11,7 +11,7 @@ using Newtonsoft.Json.Linq;
 namespace WebAPI.Controllers
 {
     [Produces("application/json")]
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class HouseController : ControllerBase
     {
@@ -20,35 +20,37 @@ namespace WebAPI.Controllers
         {
             _houseService = houseService;
         }
-        // GET: api/House
+
+        
         [HttpGet]
+        [Route("houses")]
         public Task<IEnumerable<ReturnHouseDTO>> GetHouses()
         {
             return _houseService.GetHouses();
         }
 
-        [Route("test")]
-        public Task<ReturnHouseDTO> GetConsumptionMax()
+        [Route("consumptionMax")]
+        public Task<ReturnHouseDTO>
+            GetConsumptionMax()
         {
             return _houseService.GetHouseConsumptionMax();
         }
+
+        [Route("consumptionMin")]
         public Task<ReturnHouseDTO> GetConsumptionMin()
         {
             return _houseService.GetHouseConsumptionMin();
         }
 
-        // GET: api/House/5
-
-        [HttpGet("{id}")]
+        [Route("house/{id}")]
         public ReturnHouseDTO GetHouse(int id)
         {
             GetHouseInfoDTO infoDTO = new GetHouseInfoDTO { Id = id };
             return _houseService.GetHouse(infoDTO);
         }
 
-        [HttpGet]
-        [Route("/meters/{id}")]
-        public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters([FromQuery] int id)
+        [Route("house/{id}/meters")]
+        public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(int id)
         {
             GetHouseInfoDTO infoDTO = new GetHouseInfoDTO { Id = id };
             return _houseService.GetAllWaterMeters(infoDTO);
