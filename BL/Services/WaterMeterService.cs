@@ -20,15 +20,20 @@ namespace BL.Services
         
         public bool CreateWaterMeter(CreateWaterMeterDBO waterMeter)
         {
-            var wM = new WaterMeter
+            if ((waterMeter.MeterData >= 0) 
+                && (!_dbContext.WaterMeters.Any(a => a.SerialNumber == waterMeter.SerialNumber)))
             {
-                RoomId = waterMeter.RoomId,
-                SerialNumber = waterMeter.SerialNumber,
-                MeterData = waterMeter.MeterData
-            };
-            _dbContext.WaterMeters.Add(wM);
-            _dbContext.SaveChanges();
-            return true;
+                var wM = new WaterMeter
+                {
+                    RoomId = waterMeter.RoomId,
+                    SerialNumber = waterMeter.SerialNumber,
+                    MeterData = waterMeter.MeterData
+                };
+                _dbContext.WaterMeters.Add(wM);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            { return false; }
         }
         public bool RegWaterMeter(RegWaterMeterDBO waterMeter)
         {
@@ -39,18 +44,27 @@ namespace BL.Services
         }
         public bool InputDataWaterMeterId(InputDataWaterMeterIdDBO waterMeter)
         {
-            var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
-            wM.MeterData = waterMeter.MeterData;
-            _dbContext.SaveChanges();
-            return true;
+            if (waterMeter.MeterData >=0)
+            {
+                var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
+                wM.MeterData = waterMeter.MeterData;
+                _dbContext.SaveChanges();
+                return true;
+
+            }
+            { return false; }
             
         }
         public bool InputDataWaterMeterSerialNum(InputDataWaterMeterSerialNumDBO waterMeter)
         {
-            var wM = _dbContext.WaterMeters.SingleOrDefault(wMDB => wMDB.SerialNumber == waterMeter.SerialNumber);
-            wM.MeterData = waterMeter.MeterData;
-            _dbContext.SaveChanges();
-            return true;
+            if (waterMeter.MeterData >= 0)
+            {
+                var wM = _dbContext.WaterMeters.SingleOrDefault(wMDB => wMDB.SerialNumber == waterMeter.SerialNumber);
+                wM.MeterData = waterMeter.MeterData;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            { return false; }
         }
     }
     public class CreateWaterMeterDBO

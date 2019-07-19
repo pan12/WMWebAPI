@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BL.Services
 {
-    class RoomService : IRoomService
+    public class RoomService : IRoomService
     {
         Db _dbContext;
         public RoomService(Db dbContext)
@@ -15,11 +15,7 @@ namespace BL.Services
         }
         public bool CreateRoom (CreateRoomDTO room)
         {
-            var r = new Room
-            {
-                ApartamentNumber = room.ApartamentNumber,
-                HouseId = room.HouseId
-            };
+            var r = new Room { ApartamentNumber = room.ApartamentNumber, HouseId = room.HouseId };
             _dbContext.Rooms.Add(r);
             _dbContext.SaveChanges();
             return true;
@@ -36,7 +32,7 @@ namespace BL.Services
     }
     public class CreateRoomDTO
     {
-        public int ApartamentNumber { get; set; }
+        public int ApartamentNumber { get; set;}
         public int HouseId { get; set; }
 
     }
@@ -44,6 +40,6 @@ namespace BL.Services
     {
         public int RoomId { get; set; }
         public int HouseId { get; set; }
-        
+
     }
 }

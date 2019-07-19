@@ -23,6 +23,7 @@ namespace WebAPI
         {
             services.AddTransient<IHouseService, HouseService>();
             services.AddTransient<IWaterMeterService, WaterMeterService>();
+            services.AddTransient<IRoomService, RoomService>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddEntityFrameworkNpgsql().AddDbContext<Db>(options => options.UseNpgsql(connection));

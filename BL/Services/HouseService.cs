@@ -18,25 +18,36 @@ namespace BL.Services
         }
         public bool CreateHouse(CreateHouseDTO house)
         {
-
-            var h = new House
+            if (!_dbContext.Houses.Any(a => a.Address == house.Address))
             {
-                Address = house.Address,
-                MCName = house.MCName
-            };
+                var h = new House
+                {
+                    Address = house.Address,
+                    MCName = house.MCName
+                };
 
-            _dbContext.Houses.Add(h);
-            _dbContext.SaveChanges();
-            return true;
+                _dbContext.Houses.Add(h);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            {
+                return false;
+            }
         }
         public bool EditHouse(EditHouseDTO house)
         {
-            House h = _dbContext.Houses.Find(house.Id);
-            h.Address = house.Address;
-            h.MCName = house.MCName;
-            h.Rooms = house.Rooms;
-            _dbContext.SaveChanges();
-            return true;
+            if (!_dbContext.Houses.Any(a => a.Address == house.Address))
+            {
+                House h = _dbContext.Houses.Find(house.Id);
+                h.Address = house.Address;
+                h.MCName = house.MCName;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            {
+                return false;
+            }
+                
         }
 
         public ReturnHouseDTO GetHouse(GetHouseInfoDTO h)
@@ -143,7 +154,6 @@ namespace BL.Services
         public string Address { get; set; }
 
         public string MCName { get; set; }
-        //public IEnumerable<Room> Rooms { get; set; }
 
     }
 
@@ -161,7 +171,6 @@ namespace BL.Services
         public string Address { get; set; }
 
         public string MCName { get; set; }
-        public IEnumerable<Room> Rooms { get; set; }
     }
     public class ReturnWaterMeterDTO
     {

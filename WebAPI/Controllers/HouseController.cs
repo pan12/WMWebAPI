@@ -73,8 +73,8 @@ namespace WebAPI.Controllers
         }
 
         // DELETE: api/ApiWithActions/5
-        [HttpDelete("{id}")]
-        [Route("house")]
+        [HttpDelete]
+        [Route("house/{id}")]
         public bool DeleteHouse (int id)
         {
             RemoveHouseDTO remove = new RemoveHouseDTO { Id = id };
