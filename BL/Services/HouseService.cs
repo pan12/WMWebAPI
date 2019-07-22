@@ -81,7 +81,7 @@ namespace BL.Services
                     wm => wm.RoomId,
                     (o, wm) => new { o.house, o.room, meter = wm }
                 )
-                .GroupBy(g => new { g.house.Id, g.house.Address, g.house.MCName, g.room.ApartamentNumber, g.meter.SerialNumber, g.meter.MeterData })
+                .GroupBy(g => new { g.house.Id, g.house.Address, g.house.MCName, g.meter.MeterData })
                 .Select(s => new {
                     s.Key.Id,
                     s.Key.Address,
@@ -110,7 +110,7 @@ namespace BL.Services
                     wm => wm.RoomId,
                     (o, wm) => new { o.house, o.room, meter = wm }
                 )
-                .GroupBy(g => new { g.house.Id, g.house.Address, g.house.MCName, g.room.ApartamentNumber, g.meter.SerialNumber, g.meter.MeterData })
+                .GroupBy(g => new { g.house.Id, g.house.Address, g.house.MCName, g.meter.MeterData })
                 .Select(s => new {
                     s.Key.Id,
                     s.Key.Address,
