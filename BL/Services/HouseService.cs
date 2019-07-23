@@ -27,8 +27,11 @@ namespace BL.Services
                 };
 
                 _dbContext.Houses.Add(h);
-                _dbContext.SaveChanges();
-                return true;
+                var result = _dbContext.SaveChanges();
+
+                if (result > 0)
+                    return true;
+                else return false;
             }
             {
                 return false;
@@ -38,11 +41,20 @@ namespace BL.Services
         {
             if (!_dbContext.Houses.Any(a => a.Address == house.Address))
             {
-                House h = _dbContext.Houses.Find(house.Id);
-                h.Address = house.Address;
-                h.MCName = house.MCName;
-                _dbContext.SaveChanges();
-                return true;
+                try
+                {
+                    House h = _dbContext.Houses.Find(house.Id);
+                    h.Address = house.Address;
+                    h.MCName = house.MCName;
+                    _dbContext.SaveChanges();
+                    return true;
+
+                }
+                catch (NullReferenceException)
+                {
+
+                    return false;
+                }
             }
             {
                 return false;
@@ -52,7 +64,14 @@ namespace BL.Services
 
         public ReturnHouseDTO GetHouse(GetHouseInfoDTO h)
         {
-            return _dbContext.Houses.Find(h.Id).Map();
+            try
+            {
+                return _dbContext.Houses.Find(h.Id).Map();
+            }
+            catch (NullReferenceException)
+            {
+                return null;
+            }  
         }
 
 
@@ -61,10 +80,18 @@ namespace BL.Services
 
         public bool RemoveHouse(RemoveHouseDTO h)
         {
-            House house = _dbContext.Houses.Find(h.Id);
-            _dbContext.Remove(house);
-            _dbContext.SaveChanges();
-            return true;
+            try
+            {
+                House house = _dbContext.Houses.Find(h.Id);
+                _dbContext.Remove(house);
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+
+                return false;
+            }
         }
 
         public async Task<ReturnHouseDTO> GetHouseConsumptionMin()

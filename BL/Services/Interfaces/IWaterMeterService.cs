@@ -6,10 +6,10 @@ namespace BL.Services.Interfaces
 {
     public interface IWaterMeterService
     {
-        bool CreateWaterMeter(CreateWaterMeterDBO waterMeter);
-        bool RegWaterMeter(RegWaterMeterDBO waterMeter);
-        bool InputDataWaterMeterId(InputDataWaterMeterIdDBO waterMeter);
-        bool InputDataWaterMeterSerialNum(InputDataWaterMeterSerialNumDBO waterMeter);
+        bool CreateWaterMeter(CreateWaterMeterDTO waterMeter);
+        bool RegWaterMeter(RegWaterMeterDTO waterMeter);
+        bool InputDataWaterMeterId(InputDataWaterMeterIdDTO waterMeter);
+        bool InputDataWaterMeterSerialNum(InputDataWaterMeterSerialNumDTO waterMeter);
 
     }
 }

@@ -23,7 +23,7 @@ namespace BL.Services
         }
         public bool RegRoom (RegRoomDTO room)
         {
-            var r = _dbContext.Rooms.Find(room.RoomId);
+            var r = _dbContext.Rooms.Find(room.Id);
             r.HouseId = room.HouseId;
             _dbContext.SaveChanges();
             
@@ -38,7 +38,7 @@ namespace BL.Services
     }
     public class RegRoomDTO
     {
-        public int RoomId { get; set; }
+        public int Id { get; set; }
         public int HouseId { get; set; }
 
     }

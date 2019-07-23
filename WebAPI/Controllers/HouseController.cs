@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BL.Models;
 using BL.Services;
 using BL.Services.Interfaces;
 using Microsoft.AspNetCore.Http;

@@ -18,7 +18,7 @@ namespace BL.Services
 
 
         
-        public bool CreateWaterMeter(CreateWaterMeterDBO waterMeter)
+        public bool CreateWaterMeter(CreateWaterMeterDTO waterMeter)
         {
             if ((waterMeter.MeterData >= 0) 
                 && (!_dbContext.WaterMeters.Any(a => a.SerialNumber == waterMeter.SerialNumber)))
@@ -35,56 +35,83 @@ namespace BL.Services
             }
             { return false; }
         }
-        public bool RegWaterMeter(RegWaterMeterDBO waterMeter)
+        public bool RegWaterMeter(RegWaterMeterDTO waterMeter)
         {
-            var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
-            wM.RoomId = waterMeter.RoomId;
-            _dbContext.SaveChanges();
-            return true;
+            try
+            {
+                var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
+                wM.RoomId = waterMeter.RoomId;
+                _dbContext.SaveChanges();
+                return true;
+            }
+            catch (NullReferenceException)
+            {
+
+                return false;
+            }
         }
-        public bool InputDataWaterMeterId(InputDataWaterMeterIdDBO waterMeter)
+        public bool InputDataWaterMeterId(InputDataWaterMeterIdDTO waterMeter)
         {
             if (waterMeter.MeterData >=0)
             {
-                var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
-                wM.MeterData = waterMeter.MeterData;
-                _dbContext.SaveChanges();
-                return true;
+                try
+                {
+                    var wM = _dbContext.WaterMeters.Find(waterMeter.Id);
+                    wM.MeterData = waterMeter.MeterData;
+                    _dbContext.SaveChanges();
+                    return true;
+
+                }
+                catch (NullReferenceException)
+                {
+
+                    return false;
+                }
+                
 
             }
             { return false; }
             
         }
-        public bool InputDataWaterMeterSerialNum(InputDataWaterMeterSerialNumDBO waterMeter)
+        public bool InputDataWaterMeterSerialNum(InputDataWaterMeterSerialNumDTO waterMeter)
         {
             if (waterMeter.MeterData >= 0)
             {
-                var wM = _dbContext.WaterMeters.SingleOrDefault(wMDB => wMDB.SerialNumber == waterMeter.SerialNumber);
-                wM.MeterData = waterMeter.MeterData;
-                _dbContext.SaveChanges();
-                return true;
+                try
+                {
+                    var wM = _dbContext.WaterMeters.SingleOrDefault(wMDB => wMDB.SerialNumber == waterMeter.SerialNumber);
+                    wM.MeterData = waterMeter.MeterData;
+                    _dbContext.SaveChanges();
+                    return true;
+
+                }
+                catch (NullReferenceException)
+                {
+
+                    return false; 
+                }
             }
             { return false; }
         }
     }
-    public class CreateWaterMeterDBO
+    public class CreateWaterMeterDTO
     {
 
         public int RoomId { get; set; }
         public string SerialNumber { get; set; }
         public int MeterData { get; set; }
     }
-    public class RegWaterMeterDBO
+    public class RegWaterMeterDTO
     {
         public int Id { get; set; }
         public int RoomId { get; set; }
     }
-    public class InputDataWaterMeterIdDBO
+    public class InputDataWaterMeterIdDTO
     {
         public int Id { get; set; }
         public int MeterData { get; set; }
     }
-    public class InputDataWaterMeterSerialNumDBO
+    public class InputDataWaterMeterSerialNumDTO
     {
         public string SerialNumber { get; set; }
         public int MeterData { get; set; }

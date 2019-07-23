@@ -21,7 +21,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("wMeter")]
-        public bool PostWaterMeter([FromBody] CreateWaterMeterDBO waterMeter)
+        public bool PostWaterMeter([FromBody] CreateWaterMeterDTO waterMeter)
         {
             return _waterMeterService.CreateWaterMeter(waterMeter);
         }
@@ -29,19 +29,19 @@ namespace WebAPI.Controllers
 
         [HttpPut]
         [Route("wMeter/inputDataID")]
-        public bool PutDataWaterMeterId([FromBody] InputDataWaterMeterIdDBO waterMeter)
+        public bool PutDataWaterMeterId([FromBody] InputDataWaterMeterIdDTO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterId(waterMeter);
         }
 
         [Route("wMeter/inputDataSerNum")]
-        public bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDBO waterMeter)
+        public bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDTO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterSerialNum(waterMeter);
         }
 
         [Route("wMeter/reg")]
-        public bool PutRegWaterMeter([FromBody]RegWaterMeterDBO waterMeter)
+        public bool PutRegWaterMeter([FromBody]RegWaterMeterDTO waterMeter)
         {
             return _waterMeterService.RegWaterMeter(waterMeter);
         }

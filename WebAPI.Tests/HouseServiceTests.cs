@@ -24,59 +24,67 @@ namespace WebAPI.Tests
 
             _dbContext = new Db(options);
 
-            _dbContext.AddRange(testHouses);
+            _dbContext.AddRange(_testHouses);
+            _dbContext.AddRange(_testRooms);
+            _dbContext.AddRange(_testWaterMeters);
             _dbContext.SaveChanges();
         }
 
-        List<House> testHouses = new List<House>
+        List<House> _testHouses = new List<House>
         {
-            new House {Id = 10, Address = "AAA", MCName = "a" },
-            new House {Id = 20, Address = "BBB", MCName = "b" },
-            new House {Id = 30, Address = "CCC", MCName = "c" },
+            new House {Id = 11, Address = "AAA", MCName = "a" },
+            new House {Id = 12, Address = "BBB", MCName = "b" },
+            new House {Id = 13, Address = "CCC", MCName = "c" },
         };
-
-        List<ReturnHouseDTO> returnHouses = new List<ReturnHouseDTO>
+        List<Room> _testRooms = new List<Room>
         {
-            new ReturnHouseDTO { Id = 10, Address = "AAA", MCName = "a"},
-            new ReturnHouseDTO { Id = 20, Address = "BBB", MCName = "b"},
-            new ReturnHouseDTO { Id = 30, Address = "CCC", MCName = "c"}
+            new Room { Id = 11, ApartamentNumber = 12, HouseId = 11},
+            new Room { Id = 12, ApartamentNumber = 1, HouseId = 11},
+            new Room { Id = 13, ApartamentNumber = 2, HouseId = 11},
+            new Room { Id = 14, ApartamentNumber = 12, HouseId = 12},
+            new Room { Id = 15, ApartamentNumber = 20, HouseId = 13}
         };
-
+        List<WaterMeter> _testWaterMeters = new List<WaterMeter>
+        {
+            new WaterMeter {Id = 11, MeterData = 123, RoomId = 11, SerialNumber = "wm1" },
+            new WaterMeter {Id = 12, MeterData = 0, RoomId = 11, SerialNumber = "wm2" },
+            new WaterMeter {Id = 13, MeterData = 7899, RoomId = 12, SerialNumber = "wm3" },
+            new WaterMeter {Id = 14, MeterData = 256, RoomId = 13, SerialNumber = "wm4" },
+            new WaterMeter {Id = 15, MeterData = 785, RoomId = 14, SerialNumber = "wm5" }
+        };
         [Fact]
         public void CreateHouse_NotNull()
         {
             CreateHouseDTO houseDTO = new CreateHouseDTO
             {
                 Address = "123",
-                MCName = "fasdfs"
+                MCName = "mcTest"
             };
 
             var service = new HouseService(_dbContext);
             service.CreateHouse(houseDTO);
 
-            var target = _dbContext.Houses.FirstOrDefault(h => h.MCName == "fasdfs" && h.Address == "123");
+            var target = _dbContext.Houses.FirstOrDefault(h => h.MCName == "mcTest" && h.Address == "123");
 
             Assert.NotNull(target);
         }
-
+        
         [Fact]
         public void CreateHouse_SameAddress()
         {
-            CreateHouseDTO houseDTO = new CreateHouseDTO { Address = "qwe", MCName = "mc1" };
-            CreateHouseDTO houseDTO2 = new CreateHouseDTO { Address = "qwe", MCName = "mc2" };
+            CreateHouseDTO houseDTO = new CreateHouseDTO { Address = "AAA", MCName = "mc1" };
             var service = new HouseService(_dbContext);
             service.CreateHouse(houseDTO);
-            service.CreateHouse(houseDTO2);
 
-            var target = _dbContext.Houses.FirstOrDefault(h => h.MCName == "mc2" && h.Address == "qwe");
+            var target = _dbContext.Houses.Where(h => h.Address == houseDTO.Address);
 
-            Assert.Null(target);
+            Assert.Single(target);
         }
 
         [Fact]
         public void EditHouse_NotNull()
         {
-            EditHouseDTO editDTO = new EditHouseDTO { Id = 10, Address = "popo", MCName = "mc1" };
+            EditHouseDTO editDTO = new EditHouseDTO { Id = 11, Address = "popo", MCName = "mc1" };
             var service = new HouseService(_dbContext);
             service.EditHouse(editDTO);
 
@@ -92,7 +100,7 @@ namespace WebAPI.Tests
         [Fact]
         public void EditHouse_SameAddress()
         {
-            EditHouseDTO editDTO = new EditHouseDTO { Id = 10, Address = "AAA", MCName = "mc1" };
+            EditHouseDTO editDTO = new EditHouseDTO { Id = 11, Address = "AAA", MCName = "mc1" };
             var service = new HouseService(_dbContext);
             service.EditHouse(editDTO);
 
@@ -107,13 +115,14 @@ namespace WebAPI.Tests
 
 
         [Fact]
-        public void GetHouses_Count()
+        public void GetHouses_CountAsync()
         {
             
                 var service = new HouseService(_dbContext);
-                var a = service.GetHouses().Result as List<ReturnHouseDTO>;
-                Assert.Equal(3, a.Count);
+                var a = service.GetHouses();
+                Assert.Equal(3, a.Result.Count());
         }
+
 
         [Fact]
         public void GetHouses_Type()
@@ -124,44 +133,12 @@ namespace WebAPI.Tests
 
                 Assert.IsType<List<ReturnHouseDTO>>(a);
         }
-
-        [Fact]
-        public void GetHouses_Type2()
-        {
-            var data = new List<House>
-            {
-                new House {Id = 10, Address = "AAA", MCName = "a" },
-                new House {Id = 20, Address = "BBB", MCName = "b" },
-                new House {Id = 30, Address = "CCC", MCName = "c" }
-            }.AsQueryable();
-            var mockSet = new Mock<DbSet<House>>();
-            mockSet.As<IQueryable<House>>().Setup(s => s.Provider).Returns(data.Provider);
-            mockSet.As<IQueryable<House>>().Setup(s => s.Expression).Returns(data.Expression);
-            mockSet.As<IQueryable<House>>().Setup(s => s.ElementType).Returns(data.ElementType);
-            mockSet.As<IQueryable<House>>().Setup(s => s.GetEnumerator()).Returns(data.GetEnumerator());
-
-            var mockContext = new Mock<Db>();
-            mockContext.Setup(m => m.Houses).Returns(mockSet.Object);
-
-            var service = new HouseService(mockContext.Object);
-            
-
-            var result = service.GetHouses();
-            //mock.Setup(service => service.Houses.AddRange(testHouses));
-            //var hs = new HouseService(mock.Object);
-
-            //var result = hs.GetHouses();
-
-
-            //Assert.IsType<Task<IEnumerable<ReturnHouseDTO>>>(result);
-            Assert.Equal(3, result.Result.Count());
-        }
-
+        
 
         [Fact]
         public void RemoveHouse_FindNull()
         {
-            RemoveHouseDTO removeDTO = new RemoveHouseDTO { Id = 10 };
+            RemoveHouseDTO removeDTO = new RemoveHouseDTO { Id = 11 };
             var service = new HouseService(_dbContext);
             service.RemoveHouse(removeDTO);
 
@@ -169,6 +146,114 @@ namespace WebAPI.Tests
 
             Assert.Null(target);
         }
+
+        [Fact]
+        public void GetAllWaterMeters_NotEmpty()
+        {
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 11 };
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetAllWaterMeters(h);
+
+            Assert.NotEmpty(target);
+        }
+
+        [Fact]
+        public void GetAllWaterMeters_HaveAll()
+        {
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 11 };
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetAllWaterMeters(h);
+
+            Assert.Equal(4, target.Count());
+        }
+
+        [Fact]
+        public void GetAllWaterMeters_Empty()
+        {
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 13 };
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetAllWaterMeters(h);
+
+            Assert.Empty(target);
+        }
+
+        [Fact]
+        public void GetHouseConsumptionMax_NotNull()
+        {
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouseConsumptionMax();
+
+            Assert.NotNull(target);
+        }
+
+        [Fact]
+        public void GetHouseConsumptionMin_NotNull()
+        {
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouseConsumptionMin();
+
+            Assert.NotNull(target);
+        }
+
+        [Fact]
+        public void GetHouseConsumptionMax_True()
+        {
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouseConsumptionMax();
+
+            Assert.True(target.Id == 12);
+        }
+
+        [Fact]
+        public void GetHouseConsumptionMin_True()
+        {
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouseConsumptionMin();
+
+            Assert.True(target.Id == 12 );
+        }
+
+        [Fact]
+        public void GetHouse_NotNull()
+        {
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 11 };
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouse(h);
+
+            Assert.NotNull(target);
+        }
+        
+        [Fact]
+        public void GetHouse_Null()
+        {
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 45 };
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouse(h);
+
+            Assert.Null(target);
+        }
+
+        [Fact]
+        public void GetHouse_Type()
+        {
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 11 };
+            var service = new HouseService(_dbContext);
+
+            var target = service.GetHouse(h);
+
+            Assert.IsType<ReturnHouseDTO>(target);
+        }
+
+
     }
 
 }
