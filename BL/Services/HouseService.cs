@@ -97,57 +97,54 @@ namespace BL.Services
         public async Task<ReturnHouseDTO> GetHouseConsumptionMin()
         {
             var housesWithIndications = _dbContext.Houses
-                .Join(
+                .GroupJoin(
                     _dbContext.Rooms,
                     h => h.Id,
                     r => r.HouseId,
-                    (h, r) => new { house = h, room = r }
-                ).Join(
-                    _dbContext.WaterMeters,
-                    o => o.room.Id,
-                    wm => wm.RoomId,
-                    (o, wm) => new { o.house, o.room, meter = wm }
-                )
-                .GroupBy(g => new { g.house.Id, g.house.Address, g.house.MCName, g.meter.MeterData })
-                .Select(s => new {
-                    s.Key.Id,
-                    s.Key.Address,
-                    s.Key.MCName,
-                    Value = s.Sum(v => v.meter.MeterData)
-                });
-
-            var min = housesWithIndications.Min(m => m.Value);
-            var rh = await housesWithIndications.Where(m => m.Value == min).FirstAsync();
-            ReturnHouseDTO returnHouse = new ReturnHouseDTO { Id = rh.Id, Address = rh.Address, MCName = rh.MCName };
-            return (returnHouse);
+                    (h, r) => new
+                    {
+                        house = h,
+                        Values = r.GroupJoin(
+                            _dbContext.WaterMeters,
+                            room => room.Id,
+                            wm => wm.RoomId,
+                            (room, wm) => new { waterMeter = wm.Sum(s => s.MeterData) }
+                        ) }
+                ).Where(w => w.Values.Any());
+            var houseSumValue = housesWithIndications.Select(s => new {
+                s.house,
+                Value = s.Values.Sum(sum=> sum.waterMeter)
+            });
+            var min = houseSumValue.Min(m => m.Value);
+            var rh =  houseSumValue.FirstOrDefault(f => f.Value == min);
+            return rh.house.Map();
 
         }
 
         public async Task<ReturnHouseDTO> GetHouseConsumptionMax()
         {
             var housesWithIndications = _dbContext.Houses
-                .Join(
+                .GroupJoin(
                     _dbContext.Rooms,
                     h => h.Id,
                     r => r.HouseId,
-                    (h, r) => new { house = h, room = r }
-                ).Join(
-                    _dbContext.WaterMeters,
-                    o => o.room.Id,
-                    wm => wm.RoomId,
-                    (o, wm) => new { o.house, o.room, meter = wm }
-                )
-                .GroupBy(g => new { g.house.Id, g.house.Address, g.house.MCName, g.meter.MeterData })
-                .Select(s => new {
-                    s.Key.Id,
-                    s.Key.Address,
-                    s.Key.MCName,
-                    Value = s.Sum(v => v.meter.MeterData)
-                });
-            var max = housesWithIndications.Max(m => m.Value);
-            var rh = await housesWithIndications.Where(m => m.Value == max).FirstAsync();
-            ReturnHouseDTO returnHouse = new ReturnHouseDTO { Id = rh.Id, Address = rh.Address, MCName = rh.MCName };
-            return (returnHouse);
+                    (h, r) => new
+                    {
+                        house = h,
+                        Values = r.GroupJoin(
+                            _dbContext.WaterMeters,
+                            room => room.Id,
+                            wm => wm.RoomId,
+                            (room, wm) => new { waterMeter = wm.Sum(s => s.MeterData) }
+                        )
+                    }
+                );
+            var houseSumValue = housesWithIndications.Select(s => new {
+                s.house,
+                Value = s.Values.Sum(sum => sum.waterMeter)
+            });
+            var max = houseSumValue.Max(m => m.Value);
+            return houseSumValue.FirstOrDefault(f => f.Value == max).house.Map();
 
         }
         public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house)

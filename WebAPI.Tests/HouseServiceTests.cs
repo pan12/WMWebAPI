@@ -35,6 +35,7 @@ namespace WebAPI.Tests
             new House {Id = 11, Address = "AAA", MCName = "a" },
             new House {Id = 12, Address = "BBB", MCName = "b" },
             new House {Id = 13, Address = "CCC", MCName = "c" },
+            new House {Id = 14, Address = "DDD", MCName = "d" },
         };
         List<Room> _testRooms = new List<Room>
         {
@@ -50,7 +51,8 @@ namespace WebAPI.Tests
             new WaterMeter {Id = 12, MeterData = 0, RoomId = 11, SerialNumber = "wm2" },
             new WaterMeter {Id = 13, MeterData = 7899, RoomId = 12, SerialNumber = "wm3" },
             new WaterMeter {Id = 14, MeterData = 256, RoomId = 13, SerialNumber = "wm4" },
-            new WaterMeter {Id = 15, MeterData = 785, RoomId = 14, SerialNumber = "wm5" }
+            new WaterMeter {Id = 15, MeterData = 785, RoomId = 14, SerialNumber = "wm5" },
+            new WaterMeter {Id = 16, MeterData = 785, RoomId = 15, SerialNumber = "wm6" }
         };
         [Fact]
         public void CreateHouse_NotNull()
@@ -172,7 +174,7 @@ namespace WebAPI.Tests
         [Fact]
         public void GetAllWaterMeters_Empty()
         {
-            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 13 };
+            GetHouseInfoDTO h = new GetHouseInfoDTO { Id = 14 };
             var service = new HouseService(_dbContext);
 
             var target = service.GetAllWaterMeters(h);
@@ -207,7 +209,7 @@ namespace WebAPI.Tests
 
             var target = service.GetHouseConsumptionMax();
 
-            Assert.True(target.Id == 12);
+            Assert.True(target.Result.Id == 11);
         }
 
         [Fact]
@@ -217,7 +219,7 @@ namespace WebAPI.Tests
 
             var target = service.GetHouseConsumptionMin();
 
-            Assert.True(target.Id == 12 );
+            Assert.True(target.Result.Id == 12 );
         }
 
         [Fact]
