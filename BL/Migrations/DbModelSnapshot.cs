@@ -22,7 +22,8 @@ namespace BL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .IsRequired();
 
                     b.Property<string>("MCName");
 
@@ -52,7 +53,7 @@ namespace BL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("MeterReading");
+                    b.Property<int>("MeterData");
 
                     b.Property<int>("RoomId");
 

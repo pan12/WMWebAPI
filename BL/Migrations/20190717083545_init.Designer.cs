@@ -8,8 +8,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BL.Migrations
 {
     [DbContext(typeof(Db))]
-    [Migration("20190710121324_Init")]
-    partial class Init
+    [Migration("20190717083545_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,8 @@ namespace BL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("Address");
+                    b.Property<string>("Address")
+                        .IsRequired();
 
                     b.Property<string>("MCName");
 
@@ -54,7 +55,7 @@ namespace BL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<int>("MeterReading");
+                    b.Property<int>("MeterData");
 
                     b.Property<int>("RoomId");
 

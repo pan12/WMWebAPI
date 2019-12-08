@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using BL.Services.Interfaces;
+using BL.Services;
 
 namespace WebAPI
 {
@@ -19,6 +21,9 @@ namespace WebAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<IHouseService, HouseService>();
+            services.AddTransient<IWaterMeterService, WaterMeterService>();
+            services.AddTransient<IRoomService, RoomService>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddEntityFrameworkNpgsql().AddDbContext<Db>(options => options.UseNpgsql(connection));
