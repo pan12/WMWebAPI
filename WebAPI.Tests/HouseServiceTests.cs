@@ -119,10 +119,10 @@ namespace WebAPI.Tests
         [Fact]
         public void GetHouses_CountAsync()
         {
-            
-                var service = new HouseService(_dbContext);
-                var a = service.GetHouses();
-                Assert.Equal(3, a.Result.Count());
+
+            var service = new HouseService(_dbContext);
+            var a = service.GetHouses();
+            Assert.Equal(4, a.Result.Count());
         }
 
 

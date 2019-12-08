@@ -115,7 +115,7 @@ namespace BL.Services
                 s.house,
                 Value = s.Values.Sum(sum=> sum.waterMeter)
             });
-            var min = houseSumValue.Min(m => m.Value);
+            var min = await  houseSumValue.MinAsync(m => m.Value);
             var rh =  houseSumValue.FirstOrDefault(f => f.Value == min);
             return rh.house.Map();
 
@@ -143,7 +143,7 @@ namespace BL.Services
                 s.house,
                 Value = s.Values.Sum(sum => sum.waterMeter)
             });
-            var max = houseSumValue.Max(m => m.Value);
+            var max = await houseSumValue.MaxAsync(m => m.Value);
             return houseSumValue.FirstOrDefault(f => f.Value == max).house.Map();
 
         }
