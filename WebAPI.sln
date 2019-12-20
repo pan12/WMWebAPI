@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.29102.190
+VisualStudioVersion = 16.0.29613.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI", "WebAPI\WebAPI.csproj", "{5ABDBB34-E49D-4CEA-914A-551D7F032CB2}"
 EndProject
@@ -11,6 +11,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI.Tests", "WebAPI.Test
 	ProjectSection(ProjectDependencies) = postProject
 		{5ABDBB34-E49D-4CEA-914A-551D7F032CB2} = {5ABDBB34-E49D-4CEA-914A-551D7F032CB2}
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMWebPI", "WMWebPI\WMWebPI.csproj", "{7DFA51F4-032C-4094-92DA-FE0E6CC8802C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -30,6 +32,10 @@ Global
 		{7E4F1C44-A50C-4EB0-BB2B-43507A437D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E4F1C44-A50C-4EB0-BB2B-43507A437D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E4F1C44-A50C-4EB0-BB2B-43507A437D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DFA51F4-032C-4094-92DA-FE0E6CC8802C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DFA51F4-032C-4094-92DA-FE0E6CC8802C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DFA51F4-032C-4094-92DA-FE0E6CC8802C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DFA51F4-032C-4094-92DA-FE0E6CC8802C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
