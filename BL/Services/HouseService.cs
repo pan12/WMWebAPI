@@ -39,26 +39,21 @@ namespace BL.Services
         }
         public bool EditHouse(EditHouseDTO house)
         {
-            if (!_dbContext.Houses.Any(a => a.Address == house.Address))
+            if (_dbContext.Houses.Any(a => (a.Address == house.Address && a.Id != house.Id)))
+                return false;
+            try
             {
-                try
-                {
-                    House h = _dbContext.Houses.Find(house.Id);
-                    h.Address = house.Address;
-                    h.MCName = house.MCName;
-                    _dbContext.SaveChanges();
-                    return true;
-
-                }
-                catch (NullReferenceException)
-                {
-
-                    return false;
-                }
+                House h = _dbContext.Houses.Find(house.Id);
+                h.Address = house.Address;
+                h.MCName = house.MCName;
+                _dbContext.SaveChanges();
+                return true;
             }
+            catch (NullReferenceException)
             {
                 return false;
             }
+            
                 
         }
 
