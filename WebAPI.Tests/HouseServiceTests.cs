@@ -86,7 +86,7 @@ namespace WebAPI.Tests
         [Fact]
         public void EditHouse_NotNull()
         {
-            EditHouseDTO editDTO = new EditHouseDTO { Id = 11, Address = "popo", MCName = "mc1" };
+            EditHouseDTO editDTO = new EditHouseDTO { Id = 12, Address = "popo", MCName = "mc1" };
             var service = new HouseService(_dbContext);
             service.EditHouse(editDTO);
 
@@ -110,6 +110,22 @@ namespace WebAPI.Tests
                 .FirstOrDefault(
                 h => h.Id == editDTO.Id &&
                 h.Address == editDTO.Address && 
+                h.MCName == editDTO.MCName);
+
+            Assert.NotNull(target);
+        }
+
+        [Fact]
+        public void EditHouse_BusyAddress()
+        {
+            EditHouseDTO editDTO = new EditHouseDTO { Id = 11, Address = "BBB", MCName = "mc1" };
+            var service = new HouseService(_dbContext);
+            service.EditHouse(editDTO);
+
+            var target = _dbContext.Houses
+                .FirstOrDefault(
+                h => h.Id == editDTO.Id &&
+                h.Address == editDTO.Address &&
                 h.MCName == editDTO.MCName);
 
             Assert.Null(target);

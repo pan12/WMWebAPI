@@ -12,6 +12,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebAPI.Tests", "WebAPI.Test
 		{5ABDBB34-E49D-4CEA-914A-551D7F032CB2} = {5ABDBB34-E49D-4CEA-914A-551D7F032CB2}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WMWebAPI", "WMWebAPI\WMWebAPI.csproj", "{AE40D315-6D69-40A1-A92D-BCC2315A963D}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B7CEC1AC-150F-4281-B81C-79BEABEDC1E2} = {B7CEC1AC-150F-4281-B81C-79BEABEDC1E2}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +35,10 @@ Global
 		{7E4F1C44-A50C-4EB0-BB2B-43507A437D0B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7E4F1C44-A50C-4EB0-BB2B-43507A437D0B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7E4F1C44-A50C-4EB0-BB2B-43507A437D0B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE40D315-6D69-40A1-A92D-BCC2315A963D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE40D315-6D69-40A1-A92D-BCC2315A963D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE40D315-6D69-40A1-A92D-BCC2315A963D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE40D315-6D69-40A1-A92D-BCC2315A963D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
