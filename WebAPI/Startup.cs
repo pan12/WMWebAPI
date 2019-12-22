@@ -1,19 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using BL.Services;
-using BL.Services.Interfaces;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using BL.Services.Interfaces;
+using BL.Services;
 
 namespace WebAPI
 {
@@ -35,12 +27,8 @@ namespace WebAPI
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddEntityFrameworkNpgsql().AddDbContext<Db>(options => options.UseNpgsql(connection));
-            services.AddRazorPages();
-            services.AddHttpsRedirection(options =>
-            {
-                options.RedirectStatusCode = StatusCodes.Status307TemporaryRedirect;
-                options.HttpsPort = 44344;
-            });
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,12 +38,8 @@ namespace WebAPI
             {
                 app.UseDeveloperExceptionPage();
             }
-            else
-            {
-                app.UseHsts();
-            }
-            app.UseAuthentication();
-            app.UseHttpsRedirection();
+
+            app.UseMvc();
         }
     }
 }
