@@ -20,8 +20,8 @@ namespace BL.Services
         
         public bool CreateWaterMeter(CreateWaterMeterDTO waterMeter)
         {
-            if ((waterMeter.MeterData >= 0) 
-                && (!_dbContext.WaterMeters.Any(a => a.SerialNumber == waterMeter.SerialNumber)))
+            bool serialNumberExists = _dbContext.WaterMeters.Any(a => a.SerialNumber == waterMeter.SerialNumber);
+            if ((waterMeter.MeterData >= 0) && (!serialNumberExists ))
             {
                 var wM = new WaterMeter
                 {
@@ -33,7 +33,9 @@ namespace BL.Services
                 _dbContext.SaveChanges();
                 return true;
             }
-            { return false; }
+            { 
+                return false; 
+            }
         }
         public bool RegWaterMeter(RegWaterMeterDTO waterMeter)
         {

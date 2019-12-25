@@ -91,7 +91,7 @@ namespace BL.Services
 
         public async Task<ReturnHouseDTO> GetHouseConsumptionMin()
         {
-            var housesWithIndications = _dbContext.Houses
+            var houseSumValue = _dbContext.Houses
                 .GroupJoin(
                     _dbContext.Rooms,
                     h => h.Id,
@@ -105,20 +105,18 @@ namespace BL.Services
                             wm => wm.RoomId,
                             (room, wm) => new { waterMeter = wm.Sum(s => s.MeterData) }
                         ) }
-                ).Where(w => w.Values.Any());
-            var houseSumValue = housesWithIndications.Select(s => new {
-                s.house,
-                Value = s.Values.Sum(sum=> sum.waterMeter)
-            });
+                ).Where(w => w.Values.Any()).Select(s => new {
+                    s.house,
+                    Value = s.Values.Sum(sum => sum.waterMeter)
+                });
             var min = await  houseSumValue.MinAsync(m => m.Value);
-            var rh =  houseSumValue.FirstOrDefault(f => f.Value == min);
-            return rh.house.Map();
+            return houseSumValue.FirstOrDefault(f => f.Value == min).house.Map();
 
         }
 
         public async Task<ReturnHouseDTO> GetHouseConsumptionMax()
         {
-            var housesWithIndications = _dbContext.Houses
+            var houseSumValue = _dbContext.Houses
                 .GroupJoin(
                     _dbContext.Rooms,
                     h => h.Id,
@@ -133,11 +131,10 @@ namespace BL.Services
                             (room, wm) => new { waterMeter = wm.Sum(s => s.MeterData) }
                         )
                     }
-                );
-            var houseSumValue = housesWithIndications.Select(s => new {
-                s.house,
-                Value = s.Values.Sum(sum => sum.waterMeter)
-            });
+                ).Select(s => new {
+                    s.house,
+                    Value = s.Values.Sum(sum => sum.waterMeter)
+                });
             var max = await houseSumValue.MaxAsync(m => m.Value);
             return houseSumValue.FirstOrDefault(f => f.Value == max).house.Map();
 
