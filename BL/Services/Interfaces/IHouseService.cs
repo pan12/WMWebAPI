@@ -8,14 +8,14 @@ namespace BL.Services.Interfaces
 {
     public interface IHouseService
     {
-        bool CreateHouse(CreateHouseDTO house);
-        bool EditHouse(EditHouseDTO house);
-        bool RemoveHouse(RemoveHouseDTO house);
-        ReturnHouseDTO GetHouse(GetHouseInfoDTO house);
-        Task<IEnumerable<ReturnHouseDTO>> GetHouses();
-        Task<ReturnHouseDTO> GetHouseConsumptionMax();
-        Task<ReturnHouseDTO> GetHouseConsumptionMin();
-        IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house);
+        bool CreateHouse(HouseDTO house);
+        bool EditHouse(HouseDTO house);
+        bool RemoveHouse(int houseID);
+        HouseDTO GetHouse(int houseId);
+        Task<IEnumerable<HouseDTO>> GetHouses();
+        Task<HouseDTO> GetHouseConsumptionMax();
+        Task<HouseDTO> GetHouseConsumptionMin();
+        IEnumerable<WaterMeterDTO> GetAllWaterMeters(int houseId);
     }
 
 }

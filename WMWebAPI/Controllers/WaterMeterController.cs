@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BL.Services;
 using BL.Services.Interfaces;
+using BL.Models;
 
 namespace WebAPI.Controllers
 {
@@ -21,7 +22,7 @@ namespace WebAPI.Controllers
 
         [HttpPost]
         [Route("wMeter")]
-        public bool PostWaterMeter([FromBody] CreateWaterMeterDTO waterMeter)
+        public bool PostWaterMeter([FromBody] WaterMeterDTO waterMeter)
         {
             return _waterMeterService.CreateWaterMeter(waterMeter);
         }
@@ -38,12 +39,6 @@ namespace WebAPI.Controllers
         public bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDTO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterSerialNum(waterMeter);
-        }
-
-        [Route("wMeter/reg")]
-        public bool PutRegWaterMeter([FromBody]RegWaterMeterDTO waterMeter)
-        {
-            return _waterMeterService.RegWaterMeter(waterMeter);
         }
         
     }

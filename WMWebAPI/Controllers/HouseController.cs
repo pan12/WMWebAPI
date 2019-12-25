@@ -25,42 +25,40 @@ namespace WebAPI.Controllers
         
         [HttpGet]
         [Route("houses")]
-        public Task<IEnumerable<ReturnHouseDTO>> GetHouses()
+        public Task<IEnumerable<HouseDTO>> GetHouses()
         {
             return _houseService.GetHouses();
         }
 
         [Route("house/consumptionMax")]
-        public Task<ReturnHouseDTO>
+        public Task<HouseDTO>
             GetConsumptionMax()
         {
             return _houseService.GetHouseConsumptionMax();
         }
 
         [Route("house/consumptionMin")]
-        public Task<ReturnHouseDTO> GetConsumptionMin()
+        public Task<HouseDTO> GetConsumptionMin()
         {
             return _houseService.GetHouseConsumptionMin();
         }
 
         [Route("house/{id}")]
-        public ReturnHouseDTO GetHouse(int id)
+        public HouseDTO GetHouse(int id)
         {
-            GetHouseInfoDTO infoDTO = new GetHouseInfoDTO { Id = id };
-            return _houseService.GetHouse(infoDTO);
+            return _houseService.GetHouse(id);
         }
 
         [Route("house/{id}/meters")]
-        public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(int id)
+        public IEnumerable<WaterMeterDTO> GetAllWaterMeters(int id)
         {
-            GetHouseInfoDTO infoDTO = new GetHouseInfoDTO { Id = id };
-            return _houseService.GetAllWaterMeters(infoDTO);
+            return _houseService.GetAllWaterMeters(id);
         }
 
         // POST: api/House
         [HttpPost]
         [Route("house")]
-        public bool PostHouse ([FromBody] CreateHouseDTO houseDTO)
+        public bool PostHouse ([FromBody] HouseDTO houseDTO)
         {
             return _houseService.CreateHouse(houseDTO);
         }
@@ -68,7 +66,7 @@ namespace WebAPI.Controllers
         // PUT: api/House/5
         [HttpPut]
         [Route("house")]
-        public bool PutHouse([FromBody] EditHouseDTO houseDTO)
+        public bool PutHouse([FromBody] HouseDTO houseDTO)
         {
             return _houseService.EditHouse(houseDTO);
         }
@@ -78,8 +76,7 @@ namespace WebAPI.Controllers
         [Route("house/{id}")]
         public bool DeleteHouse (int id)
         {
-            RemoveHouseDTO remove = new RemoveHouseDTO { Id = id };
-            return _houseService.RemoveHouse(remove);
+            return _houseService.RemoveHouse(id);
         }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BL.Services;
 using BL.Services.Interfaces;
+using BL.Models;
 
 namespace WebAPI.Controllers
 {
@@ -22,16 +23,9 @@ namespace WebAPI.Controllers
         // POST: api/Room
         [HttpPost]
         [Route("room")]
-        public bool PostRoom ([FromBody]CreateRoomDTO createRoom)
+        public bool PostRoom ([FromBody]RoomDTO createRoom)
         {
             return _roomService.CreateRoom(createRoom);
-        }
-
-        // PUT: api/Room/5
-        [Route("room/reg")]
-        public bool PutRegRoom([FromBody]RegRoomDTO room)
-        {
-            return _roomService.RegRoom(room);
         }
     }
 }
