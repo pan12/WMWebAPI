@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace WebAPI.Controllers
 {
-    [Produces("application/json")]
     [Route("api")]
     [ApiController]
     public class HouseController : ControllerBase
@@ -55,7 +54,6 @@ namespace WebAPI.Controllers
             return _houseService.GetAllWaterMeters(id);
         }
 
-        // POST: api/House
         [HttpPost]
         [Route("house")]
         public bool PostHouse ([FromBody] HouseDTO houseDTO)
@@ -63,7 +61,6 @@ namespace WebAPI.Controllers
             return _houseService.CreateHouse(houseDTO);
         }
 
-        // PUT: api/House/5
         [HttpPut]
         [Route("house")]
         public bool PutHouse([FromBody] HouseDTO houseDTO)
@@ -71,7 +68,6 @@ namespace WebAPI.Controllers
             return _houseService.EditHouse(houseDTO);
         }
 
-        // DELETE: api/ApiWithActions/5
         [HttpDelete]
         [Route("house/{id}")]
         public bool DeleteHouse (int id)
