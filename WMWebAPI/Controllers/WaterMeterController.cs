@@ -6,10 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using BL.Services;
 using BL.Services.Interfaces;
+using BL.Models;
 
 namespace WebAPI.Controllers
 {
-    [Route("api")]
+    [Route("api/wMeter")]
     [ApiController]
     public class WaterMeterController : ControllerBase
     {
@@ -20,31 +21,41 @@ namespace WebAPI.Controllers
         }
 
         [HttpPost]
-        [Route("wMeter")]
-        public bool PostWaterMeter([FromBody] CreateWaterMeterDTO waterMeter)
+        public bool PostWaterMeter([FromBody] WaterMeterDTO waterMeter)
         {
             return _waterMeterService.CreateWaterMeter(waterMeter);
         }
 
 
         [HttpPut]
-        [Route("wMeter/inputDataID")]
+        [Route("inputDataID")]
         public bool PutDataWaterMeterId([FromBody] InputDataWaterMeterIdDTO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterId(waterMeter);
         }
 
-        [Route("wMeter/inputDataSerNum")]
+        [Route("inputDataSerNum")]
         public bool PutDataWaterMeterSerialNum([FromBody] InputDataWaterMeterSerialNumDTO waterMeter)
         {
             return _waterMeterService.InputDataWaterMeterSerialNum(waterMeter);
         }
 
-        [Route("wMeter/reg")]
-        public bool PutRegWaterMeter([FromBody]RegWaterMeterDTO waterMeter)
+        public bool EditWaterMeter([FromBody] WaterMeterDTO waterMeter)
         {
-            return _waterMeterService.RegWaterMeter(waterMeter);
+            return _waterMeterService.EditWaterMeter(waterMeter);
         }
-        
+
+        [HttpDelete]
+        [Route("{id}")]
+        public bool RemoveWaterMeter(int id)
+        {
+            return _waterMeterService.RemoveWaterMeter(id);
+        }
+        [HttpGet]
+        [Route("{id}")]
+        public WaterMeterDTO GetWaterMeter (int id)
+        {
+            return _waterMeterService.GetWaterMeter(id);
+        }
     }
 }

@@ -2,6 +2,7 @@
 using BL.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace BL.Services
@@ -13,33 +14,41 @@ namespace BL.Services
         {
             _dbContext = dbContext;
         }
-        public bool CreateRoom (CreateRoomDTO room)
+        public bool CreateRoom (RoomDTO room)
         {
+            if (!HouseExists(room.HouseId))
+                return false;
             var r = new Room { ApartamentNumber = room.ApartamentNumber, HouseId = room.HouseId };
             _dbContext.Rooms.Add(r);
             _dbContext.SaveChanges();
             return true;
 
         }
-        public bool RegRoom (RegRoomDTO room)
+        public bool EditRoom(RoomDTO room)
         {
-            var r = _dbContext.Rooms.Find(room.Id);
-            r.HouseId = room.HouseId;
+            if (!HouseExists(room.HouseId))
+                return false;
+            var r = new Room { ApartamentNumber = room.ApartamentNumber, HouseId = room.HouseId };
+            _dbContext.Rooms.Add(r);
             _dbContext.SaveChanges();
-            
+            return true;
+
+        }
+        public RoomDTO GetRoom(int id)
+        {
+            return _dbContext.Rooms.Find(id).Map();
+        }
+        public bool RemoveRoom(int id)
+        {
+            var room =_dbContext.Rooms.Find(id);
+            _dbContext.WaterMeters.RemoveRange(
+                _dbContext.WaterMeters.Where(wm => wm.RoomId == id));
+            _dbContext.SaveChanges();
             return true;
         }
-    }
-    public class CreateRoomDTO
-    {
-        public int ApartamentNumber { get; set;}
-        public int HouseId { get; set; }
-
-    }
-    public class RegRoomDTO
-    {
-        public int Id { get; set; }
-        public int HouseId { get; set; }
-
+        bool HouseExists(int houseId)
+        {
+            return _dbContext.Houses.Find(houseId) != null;
+        }
     }
 }

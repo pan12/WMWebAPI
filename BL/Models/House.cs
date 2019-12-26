@@ -21,8 +21,15 @@ namespace BL.Models
         }
 
 
-        public ReturnHouseDTO Map()
-            => new ReturnHouseDTO { Id = this.Id, Address = this.Address, MCName = this.MCName};
-        
+        public HouseDTO Map()
+            => new HouseDTO {Id = this.Id,  Address = this.Address, MCName = this.MCName };
+
     }
+    public class HouseDTO
+    {
+        public int Id { get; set; }
+        public string Address { get; set; }
+        public string MCName { get; set; }
+    }
+
 }

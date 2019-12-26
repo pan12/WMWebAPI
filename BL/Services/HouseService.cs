@@ -16,7 +16,7 @@ namespace BL.Services
         {
             _dbContext = dbContext;
         }
-        public bool CreateHouse(CreateHouseDTO house)
+        public bool CreateHouse(HouseDTO house)
         {
             if (!_dbContext.Houses.Any(a => a.Address == house.Address))
             {
@@ -37,7 +37,7 @@ namespace BL.Services
                 return false;
             }
         }
-        public bool EditHouse(EditHouseDTO house)
+        public bool EditHouse(HouseDTO house)
         {
             if (_dbContext.Houses.Any(a => (a.Address == house.Address && a.Id != house.Id)))
                 return false;
@@ -57,11 +57,11 @@ namespace BL.Services
                 
         }
 
-        public ReturnHouseDTO GetHouse(GetHouseInfoDTO h)
+        public HouseDTO GetHouse(int houseId)
         {
             try
             {
-                return _dbContext.Houses.Find(h.Id).Map();
+                return _dbContext.Houses.Find(houseId).Map();
             }
             catch (NullReferenceException)
             {
@@ -70,28 +70,26 @@ namespace BL.Services
         }
 
 
-        public async Task<IEnumerable<ReturnHouseDTO>> GetHouses()
+        public async Task<IEnumerable<HouseDTO>> GetHouses()
             => await _dbContext.Houses.Select(house => house.Map()).ToListAsync();
 
-        public bool RemoveHouse(RemoveHouseDTO h)
+        public bool RemoveHouse(int houseId)
         {
-            try
-            {
-                House house = _dbContext.Houses.Find(h.Id);
-                _dbContext.Remove(house);
-                _dbContext.SaveChanges();
-                return true;
-            }
-            catch (NullReferenceException)
-            {
-
+            var house = _dbContext.Houses.Find(houseId);
+            if (house == null)
                 return false;
-            }
+            _dbContext.Houses.Remove(house);
+            var rooms =  _dbContext.Rooms.Where(r => r.HouseId == houseId);
+            var wms = _dbContext.WaterMeters.Where(wm => rooms.Any(r => r.Id == wm.RoomId));
+            _dbContext.Rooms.RemoveRange(rooms);
+            _dbContext.WaterMeters.RemoveRange(wms);
+            _dbContext.SaveChanges();
+            return true;
         }
 
-        public async Task<ReturnHouseDTO> GetHouseConsumptionMin()
+        public async Task<HouseDTO> GetHouseConsumptionMin()
         {
-            var housesWithIndications = _dbContext.Houses
+            var houseSumValue = _dbContext.Houses
                 .GroupJoin(
                     _dbContext.Rooms,
                     h => h.Id,
@@ -105,20 +103,18 @@ namespace BL.Services
                             wm => wm.RoomId,
                             (room, wm) => new { waterMeter = wm.Sum(s => s.MeterData) }
                         ) }
-                ).Where(w => w.Values.Any());
-            var houseSumValue = housesWithIndications.Select(s => new {
-                s.house,
-                Value = s.Values.Sum(sum=> sum.waterMeter)
-            });
+                ).Where(w => w.Values.Any()).Select(s => new {
+                    s.house,
+                    Value = s.Values.Sum(sum => sum.waterMeter)
+                });
             var min = await  houseSumValue.MinAsync(m => m.Value);
-            var rh =  houseSumValue.FirstOrDefault(f => f.Value == min);
-            return rh.house.Map();
+            return houseSumValue.FirstOrDefault(f => f.Value == min).house.Map();
 
         }
 
-        public async Task<ReturnHouseDTO> GetHouseConsumptionMax()
+        public async Task<HouseDTO> GetHouseConsumptionMax()
         {
-            var housesWithIndications = _dbContext.Houses
+            var houseSumValue = _dbContext.Houses
                 .GroupJoin(
                     _dbContext.Rooms,
                     h => h.Id,
@@ -133,19 +129,18 @@ namespace BL.Services
                             (room, wm) => new { waterMeter = wm.Sum(s => s.MeterData) }
                         )
                     }
-                );
-            var houseSumValue = housesWithIndications.Select(s => new {
-                s.house,
-                Value = s.Values.Sum(sum => sum.waterMeter)
-            });
+                ).Select(s => new {
+                    s.house,
+                    Value = s.Values.Sum(sum => sum.waterMeter)
+                });
             var max = await houseSumValue.MaxAsync(m => m.Value);
             return houseSumValue.FirstOrDefault(f => f.Value == max).house.Map();
 
         }
-        public IEnumerable<ReturnWaterMeterDTO> GetAllWaterMeters(GetHouseInfoDTO house)
+        public IEnumerable<WaterMeterDTO> GetAllWaterMeters(int houseId)
         {
             var waterMeters = _dbContext.Rooms
-                .Where(r => r.HouseId == house.Id)
+                .Where(r => r.HouseId == houseId)
                 .Join(
                     _dbContext.WaterMeters,
                     r => r.Id,
@@ -156,44 +151,5 @@ namespace BL.Services
 
             return waterMeters.Select(w => w.Map());
         }
-    }
-
-
-
-    public class CreateHouseDTO
-    {
-        public string Address { get; set; }
-        public string MCName { get; set; }
-    }
-
-    public class ReturnHouseDTO
-    {
-
-        public int Id { get; set; }
-        public string Address { get; set; }
-
-        public string MCName { get; set; }
-
-    }
-
-    public class RemoveHouseDTO
-    {
-        public int Id { get; set; }
-    }
-    public class GetHouseInfoDTO
-    {
-        public int Id { get; set; }
-    }
-    public class EditHouseDTO
-    {
-        public int Id { get; set; }
-        public string Address { get; set; }
-
-        public string MCName { get; set; }
-    }
-    public class ReturnWaterMeterDTO
-    {
-        public int Id { get; set; }
-        public int WaterMeterData { get; set; }
-    }
+    }    
 }
